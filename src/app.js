@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const livros = [
+const user = [
     {
         id : 1 ,
         " name " : " João Silva " ,
@@ -22,38 +22,38 @@ const livros = [
 ]
 
 app.get('/', (req, res) => {
-    res.status(200).send('Curso de Node !')
+    res.status(200).send('Back-End/NodeJs')
 })
 
-app.get('/livros', (req, res) => {
-    res.status(200).json(livros)
+app.get('/api/v1/user', (req, res) => {
+    res.status(200).json(user)
 })
 
-app.get('/livros/:id', (req, res) => {
+app.get('/api/v1/user/:id', (req, res) => {
     let index = buscaLivro(req.params.id);
-    res.status(200).json(livros[index]);
+    res.status(200).json(user[index]);
 })
 
-app.post('/livros', (req, res) => {
-    livros.push(req.body);
-    res.status(201).send('Livro cadastrado !')
+app.post('/api/v1/user', (req, res) => {
+    user.push(req.body);
+    res.status(201).send('Usuário cadastrado !')
 })
 
-app.put('/livros/:id', (req, res) => {
+app.put('/api/v1/user/:id', (req, res) => {
     let index = buscaLivro(req.params.id);
-    livros[index].titulo = req.body.titulo;
-    res.status(200).json(livros);
+    user[index].titulo = req.body.titulo;
+    res.status(200).json(user);
 })
 
-app.delete('/livros/:id', (req, res) => {
+app.delete('/api/v1/user/:id', (req, res) => {
     let {id} = req.params;
     let index = buscaLivro(id);
-    livros.splice(index, 1);
-    res.status(200).send('Livro removido');
+    user.splice(index, 1);
+    res.status(200).send('Usuário removido !');
 })
 
 function buscaLivro(id) {
-    return livros.findIndex(livro => livro.id == id)
+    return user.findIndex(livro => livro.id == id)
 }
 
 export default app;
