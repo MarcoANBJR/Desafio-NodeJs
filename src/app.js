@@ -1,6 +1,7 @@
 import express from "express";
 import db from './config/dbConnect.js';
 import users from './models/User.js';
+import routes from './routers/index.js';
 
 db.on('error', console.log.bind(console, 'Erro de conexão !'))
 db.once('open', () => {
@@ -10,6 +11,8 @@ db.once('open', () => {
 const app = express();
 
 app.use(express.json())
+
+routes(app);
 
 // const users = [
 //     {
@@ -28,24 +31,9 @@ app.use(express.json())
 //     }
 // ]
 
-app.get('/', (req, res) => {
-    res.status(200).send('Back-End/NodeJs')
-})
-
-app.get('/api/v1/user', (req, res) => {
-    users.find((err, users) => {
-        res.status(200).json(users)
-    })
-})
-
 app.get('/api/v1/user/:id', (req, res) => {
     let index = buscaLivro(req.params.id);
     res.status(200).json(users[index]);
-})
-
-app.post('/api/v1/user', (req, res) => {
-    users.push(req.body);
-    res.status(201).send('Usuário cadastrado !')
 })
 
 app.put('/api/v1/user/:id', (req, res) => {
