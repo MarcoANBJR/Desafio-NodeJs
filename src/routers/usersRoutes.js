@@ -2,12 +2,13 @@ import express from "express";
 import UserController from './../controller/usersController.js';
 
 const router = express.Router();
+const path = '/api/v1/user/';
 
 router
-    .get('/api/v1/user', UserController.listUsers)
-    .get('/api/v1/user/:id', UserController.userById)
-    .post('/api/v1/user', UserController.postUser)
-    .put('/api/v1/user/:id', UserController.putUser)
-    .delete('/api/v1/user/:id', UserController.deleteUser)
+    .get(`${path}`, UserController.listUsers)
+    .get(`${path}:id`, UserController.userById)
+    .post(`${path}`, UserController.postUser)
+    .put(`${path}:id`, UserController.putUser)
+    .delete(`${path}:id`, UserController.deleteUser)
 
     export default router;

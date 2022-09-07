@@ -13,9 +13,9 @@ export default class UserController {
 
         users.findById(id, (err, users) => {
             
-            // err ?
-            //     res.status(400).send({message: `${err.message} - id incorreto !`}) :
-            //     res.status(200).send(users)
+            err ?
+                res.status(400).send({message: `${err.message} - id incorreto !`}) :
+                res.status(200).send(users)
         })
     }
 
@@ -53,7 +53,7 @@ export default class UserController {
             if(err) {
                 res.status(500).send({message: err.message})
             } else {
-                res.status(200).send({message: 'Usuário removido !'})
+                res.status(204).send({message: 'Usuário removido !'})
             }
             // err ? 
             //     res.status(500).send({message: err.message}) :
