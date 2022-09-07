@@ -8,6 +8,17 @@ export default class UserController {
         })
     }
 
+    static userById = (req, res) => {
+        const {id} = req.params;
+
+        users.findById(id, (err, users) => {
+            
+            // err ?
+            //     res.status(400).send({message: `${err.message} - id incorreto !`}) :
+            //     res.status(200).send(users)
+        })
+    }
+
     static postUser = (req, res) => {
         let user = new users(req.body);
 
@@ -19,5 +30,34 @@ export default class UserController {
             }
         })
     }
+
+    static putUser = (req, res) => {
+        const {id} = req.params;
+
+        users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
+            if(err) {
+                res.status(500).send({message})
+            } else {
+                res.status(200).send({message: 'Usuário cadastrado !'})
+            }
+            // err ? 
+            //     res.status(500).send({message}) : 
+            //     res.status(200).send({message: 'Usuário cadastrado !'})
+        })
+    }
     
+    static deleteUser = (req, res) => {
+        const {id} = req.params;
+
+        users.findByIdAndDelete(id, (err) => {
+            if(err) {
+                res.status(500).send({message: err.message})
+            } else {
+                res.status(200).send({message: 'Usuário removido !'})
+            }
+            // err ? 
+            //     res.status(500).send({message: err.message}) :
+            //     res.status(200).send({message: 'Usuário removido !'})
+        })
+    }
 }
