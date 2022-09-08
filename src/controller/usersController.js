@@ -38,6 +38,7 @@ export default class UserController {
 
     static userByName = (req, res) => {
         const {name} = req.query;
+    //  users.find({'name': {$regex: name, $option: 'i'}}, {}, (err, users) => { //! $option: 'i' /*Case sensitive*\ 
         users.find({'name': {$regex: name}}, {}, (err, users) => { 
             users = users.map((user) => {
                 const usersPassword = {...user['_doc']};
