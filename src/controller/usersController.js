@@ -38,7 +38,7 @@ export default class UserController {
 
     static userByName = (req, res) => {
         const {name} = req.query;
-        users.find({'name': {$regex: name, $option: 'i'}}, {}, (err, users) => {
+        users.find({'name': {$regex: name}}, {}, (err, users) => { 
             users = users.map((user) => {
                 const usersPassword = {...user['_doc']};
                 delete usersPassword.password;
@@ -46,8 +46,9 @@ export default class UserController {
             })
             err ?
                 res.status(404).send('Usuário não encontrado!') :
-                res.status(200).send(users)
-        }) 
+                res.status(200).json(users);
+        });
+        // }).select("-password"); //! Outra alternativa
     }
 
     static postUser = (req, res) => {
@@ -63,9 +64,9 @@ export default class UserController {
     static putUser = (req, res) => {
         const {id} = req.params;
 
-        users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
+        users.findByIdAndUpdate(id, {$set: req.body},{ runValidators: true}, (err) => {
             err ? 
-                res.status(404).send({message}) : 
+                res.status(404).send({message: err.message}) : 
                 res.status(200).send({message: 'Usuário cadastrado !'})
         })
     }

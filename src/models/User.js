@@ -11,12 +11,17 @@ function birthDate(birth) {
     return age>17;
 }
 
+function formatDate(date) {
+    let fDate = new Date(date);
+    return fDate.toLocaleDateString();
+}
+
 const userSchema = new mongoose.Schema(
     {
         id : {type: String} ,
         name :{type: String, required: true, validate: regexAllLetter} ,
-        cpf :{type: Number, required: true, validate: /^[0-9]+$/, maxlength: 11, minlength: 11} ,
-        birthDate : {type: Date, required: true, validate: [birthDate, 'Menor de idade !']} ,
+        cpf :{type: String, required: true, validate: /^[0-9]+$/, minlength: 11, maxlength: 11} ,
+        birthDate : {type: String, set:date => formatDate(date), required: true, validate: [birthDate, 'Menor de idade !']} ,
         email :{type: String, required: true, validate: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/} ,
         password :{type: String, required: true, validate: regexLetterNumber, minlength: 6} ,
         address :{type: String, required: true, validate: regexAllLetter} ,
