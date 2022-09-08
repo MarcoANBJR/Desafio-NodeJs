@@ -10,13 +10,12 @@ export default class UserController {
                 return usersPassword;
             })
 
-            // res.status(200).json(users)
+            //! res.status(200).json(users)
             
             const {page} = req.query;
-            const {limit} = req.query;
 
-            const startIndex = (page - 1) * limit;
-            const endIndex = page * limit;
+            const startIndex = (page - 1) * 3;
+            const endIndex = page * 3;
 
             const resultUser = users.slice(startIndex, endIndex)
 
@@ -39,7 +38,7 @@ export default class UserController {
 
     static userByName = (req, res) => {
         const {name} = req.query;
-        users.find({'name': {$regex: name}}, {}, (err, users) => {
+        users.find({'name': {$regex: name, $option: 'i'}}, {}, (err, users) => {
             users = users.map((user) => {
                 const usersPassword = {...user['_doc']};
                 delete usersPassword.password;
@@ -65,14 +64,9 @@ export default class UserController {
         const {id} = req.params;
 
         users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
-            if(err) {
-                res.status(404).send({message})
-            } else {
+            err ? 
+                res.status(404).send({message}) : 
                 res.status(200).send({message: 'Usuário cadastrado !'})
-            }
-            // err ? 
-            //     res.status(404).send({message}) : 
-            //     res.status(200).send({message: 'Usuário cadastrado !'})
         })
     }
     
@@ -80,14 +74,9 @@ export default class UserController {
         const {id} = req.params;
 
         users.findByIdAndDelete(id, (err) => {
-            if(err) {
-                res.status(404).send({message: err.message})
-            } else {
+            err ? 
+                res.status(404).send({message: err.message}) :
                 res.status(204).send({message: 'Usuário removido !'})
-            }
-            // err ? 
-            //     res.status(500).send({message: err.message}) :
-            //     res.status(200).send({message: 'Usuário removido !'})
         })
     }
 }
