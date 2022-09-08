@@ -9,12 +9,14 @@ export default class UserController {
                 delete usersPassword.password;
                 return usersPassword;
             })
+
+            // res.status(200).json(users)
             
             const {page} = req.query;
             const {limit} = req.query;
 
             const startIndex = (page - 1) * limit;
-            const endIndex =page * limit;
+            const endIndex = page * limit;
 
             const resultUser = users.slice(startIndex, endIndex)
 
@@ -53,11 +55,9 @@ export default class UserController {
         let user = new users(req.body);
 
         user.save((err) => {
-            if(err) {
-                res.status(500).send({message: `${err.message} - erro ao cadastrar o usuário !`})
-            } else {
+            err ? 
+                res.status(500).send({message: `${err.message} - erro ao cadastrar o usuário !`}) :
                 res.status(201).send(user.toJSON())
-            }
         })
     }
 
@@ -71,7 +71,7 @@ export default class UserController {
                 res.status(200).send({message: 'Usuário cadastrado !'})
             }
             // err ? 
-            //     res.status(500).send({message}) : 
+            //     res.status(404).send({message}) : 
             //     res.status(200).send({message: 'Usuário cadastrado !'})
         })
     }
