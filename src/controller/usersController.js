@@ -3,24 +3,50 @@ import users from './../models/User.js';
 export default class UserController {
 
     static listUsers = (req, res) => {
-        users.find((err, user) => {
-            user = user.map((user) => {
-                const userPassword = {...user['_doc']};
-                delete userPassword.password;
-                return userPassword;
+        users.find((err, users) => {
+            users = users.map((users) => {
+                const usersPassword = {...users['_doc']};
+                delete usersPassword.password;
+                return usersPassword;
             })
-            res.status(200).json(user)
+            
+            const {page} = req.query;
+            const {limit} = req.query;
+
+            const startIndex = (page - 1) * limit;
+            const endIndex =page * limit;
+
+            const resultUser = users.slice(startIndex, endIndex)
+
+            res.status(200).json(resultUser)
         })
     }
 
     static userById = (req, res) => {
         const {id} = req.params;
 
-        users.findById(id, (err, users) => {            
+        users.findById(id, (err, users) => {  
+            const userPassword = {...users['_doc']};
+            delete userPassword.password;
+                    
             err ?
                 res.status(404).send({message: `${err.message} - id incorreto !`}) :
-                res.status(200).send(users)
+                res.status(200).send(userPassword)
         })
+    }
+
+    static userByName = (req, res) => {
+        const {name} = req.query;
+        users.find({'name': {$regex: name}}, {}, (err, users) => {
+            users = users.map((user) => {
+                const usersPassword = {...user['_doc']};
+                delete usersPassword.password;
+                return usersPassword;
+            })
+            err ?
+                res.status(404).send('Usuário não encontrado!') :
+                res.status(200).send(users)
+        }) 
     }
 
     static postUser = (req, res) => {

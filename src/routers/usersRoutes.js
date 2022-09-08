@@ -6,6 +6,7 @@ const path = '/api/v1/user/';
 
 router
     .get(`${path}`, UserController.listUsers)
+    .get(`${path}search`, UserController.userByName)
     .get(`${path}:id`, UserController.userById)
     .post(`${path}`, UserController.postUser)
     .put(`${path}:id`, UserController.putUser)
